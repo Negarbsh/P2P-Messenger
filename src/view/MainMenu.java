@@ -1,7 +1,5 @@
 package view;
 
-import sun.net.PortConfig;
-
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,9 +23,9 @@ public class MainMenu {
             else if (command.startsWith("contactconfig "))
                 message = (ContactMenu.checkCommand(command.substring("contactconfig ".length())));
             else if (command.startsWith("send "))
-                message = (MailMenu.checkCommand(command.substring("send ".length())));
+                message = (MailMenu.checkSendCommand(command.substring("send ".length())));
             else if (command.startsWith("focus "))
-                message = (MailMenu.checkCommand(command.substring("focus ".length())));
+                message = (MailMenu.checkFocusCommand(command.substring("focus ".length())));
             else if (command.startsWith("show "))
                 message = (ShowMenu.checkCommand(command.substring("show ".length())));
             else if (command.equals("exit ")) return;
@@ -43,4 +41,13 @@ public class MainMenu {
         else return matcher.group(1);
     }
 
+    public static int getIntValueOfFlag(String command, String flag) {
+        String intString = getValueOfFlag(command, flag);
+        if (intString == null) return -1;
+        try {
+            return Integer.parseInt(intString);
+        } catch (Exception e) {
+            return -1; //it's not good but who cares?
+        }
+    }
 }

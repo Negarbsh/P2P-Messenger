@@ -1,8 +1,11 @@
 package model;
 
 import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
+import cotroller.MailController;
+import cotroller.UserConfig;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User {
     private final static ArrayList<User> allUsers;
@@ -12,6 +15,7 @@ public class User {
     private final ArrayList<User> contacts;
     private int port;
     private boolean isPortSet;
+    private HashMap<String, String> messages;
 
     static {
         allUsers = new ArrayList<>();
@@ -21,6 +25,7 @@ public class User {
         isPortSet = false;
         port = 0;
         contacts = new ArrayList<>();
+        messages = new HashMap<>();
     }
 
     public User(String username, String password) {
@@ -47,6 +52,8 @@ public class User {
     public void setPort(int port) {
         isPortSet = true;
         this.port = port;
+        if (UserConfig.getLoggedInUser() == this)
+            MailController.setShouldCheckNewMessages(true);
     }
 
     public boolean isPortSet() {
@@ -56,5 +63,17 @@ public class User {
     public void closePort() {
         isPortSet = false;
         port = 0;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void addToMessages(String newMessage) {
+        String[] messageInfo = newMessage.split(" -> ");
+        if (messageInfo.length != 2) return;
+        String username = messageInfo[0];
+        String message = messageInfo[1];
+        messages.put(username, message);
     }
 }
