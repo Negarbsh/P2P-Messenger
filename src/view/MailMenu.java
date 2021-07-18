@@ -2,7 +2,6 @@ package view;
 
 import cotroller.MailController;
 import cotroller.UserConfig;
-import sun.applet.Main;
 
 public class MailMenu {
     private static int currentPortFocus;
@@ -11,7 +10,7 @@ public class MailMenu {
     private final static String noHostFocus = "you must focus on a host before using this command";
     private final static String messageSendingError = "could not send message";
 
-    {
+    static {
         currentHostFocus = null;
         currentPortFocus = -1;
     }

@@ -9,10 +9,8 @@ public class MainMenu {
     public static String success = "success";
     public static String noLogin = "you must login to access this feature";
 
-
     public static void run() {
         Scanner scanner = new Scanner(System.in);
-
         while (true) {
             String command = scanner.nextLine();
             command = command.concat(" ");

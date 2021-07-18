@@ -1,11 +1,9 @@
 package model;
 
-import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
 import cotroller.MailController;
 import cotroller.UserConfig;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +23,7 @@ public class User {
 
     {
         isPortSet = false;
-        port = 0;
+        port = -1;
         contacts = new ArrayList<>();
         messages = new ArrayList<>();
     }
@@ -51,22 +49,6 @@ public class User {
         return this.username;
     }
 
-    public ArrayList<String> getSenders() {
-        ArrayList<String> senders = new ArrayList<>();
-        for (Message message : messages) {
-            senders.add(message.getSenderUsername());
-        }
-        Set<String> set = new HashSet<>(senders);
-        senders.clear();
-        senders.addAll(set);
-        return senders;
-    }
-
-
-    public ArrayList<Message> getCopyOfMessages() {
-        return new ArrayList<>(messages);
-    }
-
     public int getPort() {
         return port;
     }
@@ -87,12 +69,28 @@ public class User {
         port = 0;
     }
 
+    public ArrayList<String> getSenders() {
+        ArrayList<String> senders = new ArrayList<>();
+        for (Message message : messages) {
+            senders.add(message.getSenderUsername());
+        }
+        Set<String> set = new HashSet<>(senders);
+        senders.clear();
+        senders.addAll(set);
+        return senders;
+    }
+
+
+    public ArrayList<Message> getCopyOfMessages() {
+        return new ArrayList<>(messages);
+    }
+
     public synchronized void addToMessages(String newMessage) {
         String[] messageInfo = newMessage.split(" -> ");
         if (messageInfo.length != 2) return;
         String sender = messageInfo[0];
         String text = messageInfo[1];
-        Message message = new Message(text, sender, this.username);
+        Message message = new Message(text, sender);
         messages.add(message);
     }
 

@@ -1,7 +1,6 @@
 package cotroller;
 
 import model.User;
-import sun.applet.Main;
 import view.MainMenu;
 
 import java.io.DataInputStream;
@@ -14,7 +13,7 @@ import java.net.Socket;
 public class MailController {
 
     private static boolean shouldCheckNewMessages = false;
-    private static String messageSendingError = "could not send message";
+    private final static String messageSendingError = "could not send message";
 
     public static void setShouldCheckNewMessages(boolean shouldCheckNewMessages) {
         MailController.shouldCheckNewMessages = shouldCheckNewMessages;
@@ -24,7 +23,7 @@ public class MailController {
     public static String sendMessage(int portToSend, String hostToSend, String message) {
         User currentUser = UserConfig.getLoggedInUser();
         if (currentUser == null) return MainMenu.noLogin;
-        if (hostToSend == null || portToSend == -1) return messageSendingError; //todo null or error?
+        if (hostToSend == null || portToSend == -1) return messageSendingError;
         try {
             Socket socket = new Socket(hostToSend, portToSend);
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -40,7 +39,7 @@ public class MailController {
 
     public static void startReceivingMessages() {
         User user = UserConfig.getLoggedInUser();
-        if (user.getPort() == -1) return; //todo havaset bashe ke vaghti in seda mishe bayad port ham set shode bashe:)
+        if (user.getPort() == -1) return;
         new Thread(() -> {
             shouldCheckNewMessages = true;
             try {
@@ -56,7 +55,7 @@ public class MailController {
                     dataInputStream.close();
                 serverSocket.close();
             } catch (IOException e) {
-                System.out.println(MainMenu.generalError);      //todo fine?
+                System.out.println(MainMenu.generalError);
             }
         }).start();
     }

@@ -2,11 +2,9 @@ package view;
 
 import cotroller.UserConfig;
 import model.User;
-import sun.applet.Main;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class PortConfigMenu {
     private final static String generalError = MainMenu.generalError;
@@ -21,18 +19,17 @@ public class PortConfigMenu {
         if (command.contains("--close ")) {
             int port = MainMenu.getIntValueOfFlag(command, "port");
             if (port == -1) return generalError;
-            if (user.getPort() != port) return notOpenPort;//todo : fine?
+            if (user.getPort() != port) return notOpenPort;
             else {
                 user.closePort();
                 return success;
             }
         }
-
         if (command.contains("--listen ")) {
             int port = MainMenu.getIntValueOfFlag(command, "port");
             if (port == -1) return generalError;
             if (command.contains("--rebind ")) {
-                user.closePort(); //todo fine? shouldn't there be any error?
+                user.closePort();
             } else {
                 if (user.isPortSet()) return portAlreadySet;
             }
@@ -40,7 +37,7 @@ public class PortConfigMenu {
                 ServerSocket socket = new ServerSocket(port);
                 socket.close();
             } catch (IOException e) {
-                return MainMenu.generalError; //todo I guess it should be something else.
+                return MainMenu.generalError;
             }
             user.setPort(port);
             return success;
