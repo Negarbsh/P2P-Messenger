@@ -5,7 +5,6 @@ import model.Message;
 import model.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ShowMenu {
     private final static String nothingToShow = "no item is available";
@@ -24,15 +23,16 @@ public class ShowMenu {
                 }
             }
         } else if (command.contains("--messages ")) {
+            ArrayList<Message> messages = user.getCopyOfMessages();
             if (command.contains("--count "))
-                System.out.println(user.getMessages().size());
+                System.out.println(messages.size());
             else {
-                for (Message message : user.getMessages()) {
+                if(messages.isEmpty()) return nothingToShow;
+                for (Message message : messages) {
                     System.out.println(message);
                 }
             }
         }
-
         return null;
     }
 }

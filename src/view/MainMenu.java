@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 public class MainMenu {
     public static String generalError = "an error occurred";
+    public static String success = "success";
     public static String noLogin = "you must login to access this feature";
 
 
@@ -35,8 +36,8 @@ public class MainMenu {
     }
 
     public static String getValueOfFlag(String command, String flag) {
-        Pattern pattern = Pattern.compile(command);
-        Matcher matcher = pattern.matcher("--" + flag + " ([\\S]+) ");
+        Pattern pattern = Pattern.compile("--" + flag + " (\\S+) ");
+        Matcher matcher = pattern.matcher(command);
         if (!matcher.find()) return null;
         else return matcher.group(1);
     }
@@ -49,5 +50,12 @@ public class MainMenu {
         } catch (Exception e) {
             return -1; //it's not good but who cares?
         }
+    }
+
+    public static String getMessageInCommand(String command) {
+        Pattern pattern = Pattern.compile("--message" + " \"([^\"]+)\" ");
+        Matcher matcher = pattern.matcher(command);
+        if (!matcher.find()) return null;
+        else return matcher.group(1);
     }
 }

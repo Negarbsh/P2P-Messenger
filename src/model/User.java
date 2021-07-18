@@ -6,6 +6,8 @@ import cotroller.UserConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class User {
     private final static ArrayList<User> allUsers;
@@ -49,17 +51,20 @@ public class User {
         return this.username;
     }
 
-    public ArrayList<String> getSenders(){
+    public ArrayList<String> getSenders() {
         ArrayList<String> senders = new ArrayList<>();
         for (Message message : messages) {
             senders.add(message.getSenderUsername());
         }
+        Set<String> set = new HashSet<>(senders);
+        senders.clear();
+        senders.addAll(set);
         return senders;
     }
 
 
-    public ArrayList<Message> getMessages() {
-        return messages;
+    public ArrayList<Message> getCopyOfMessages() {
+        return new ArrayList<>(messages);
     }
 
     public int getPort() {
@@ -82,12 +87,12 @@ public class User {
         port = 0;
     }
 
-    public void addToMessages(String newMessage) {
+    public synchronized void addToMessages(String newMessage) {
         String[] messageInfo = newMessage.split(" -> ");
         if (messageInfo.length != 2) return;
         String sender = messageInfo[0];
         String text = messageInfo[1];
-        Message message = new Message(text,sender,this.username);
+        Message message = new Message(text, sender, this.username);
         messages.add(message);
     }
 
