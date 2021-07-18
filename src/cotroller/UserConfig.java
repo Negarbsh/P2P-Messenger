@@ -1,8 +1,6 @@
 package cotroller;
 
 import model.User;
-import sun.applet.Main;
-import view.MailMenu;
 
 public class UserConfig {
     private static User loggedInUser;
@@ -18,6 +16,7 @@ public class UserConfig {
     }
 
     public static void logout() {
+        MailController.stopReceivingMessages();
         loggedInUser = null;
     }
 

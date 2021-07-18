@@ -15,7 +15,7 @@ public class User {
     private final ArrayList<User> contacts;
     private int port;
     private boolean isPortSet;
-    private HashMap<String, String> messages;
+    private ArrayList<Message> messages;
 
     static {
         allUsers = new ArrayList<>();
@@ -25,7 +25,7 @@ public class User {
         isPortSet = false;
         port = 0;
         contacts = new ArrayList<>();
-        messages = new HashMap<>();
+        messages = new ArrayList<>();
     }
 
     public User(String username, String password) {
@@ -43,6 +43,23 @@ public class User {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public ArrayList<String> getSenders(){
+        ArrayList<String> senders = new ArrayList<>();
+        for (Message message : messages) {
+            senders.add(message.getSenderUsername());
+        }
+        return senders;
+    }
+
+
+    public ArrayList<Message> getMessages() {
+        return messages;
     }
 
     public int getPort() {
@@ -65,15 +82,13 @@ public class User {
         port = 0;
     }
 
-    public String getUsername() {
-        return this.username;
-    }
-
     public void addToMessages(String newMessage) {
         String[] messageInfo = newMessage.split(" -> ");
         if (messageInfo.length != 2) return;
-        String username = messageInfo[0];
-        String message = messageInfo[1];
-        messages.put(username, message);
+        String sender = messageInfo[0];
+        String text = messageInfo[1];
+        Message message = new Message(text,sender,this.username);
+        messages.add(message);
     }
+
 }
