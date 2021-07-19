@@ -12,10 +12,10 @@ public class User {
 
     private final String username;
     private final String password;
-    private final ArrayList<User> contacts;
+    private final ArrayList<Contact> contacts;
     private int port;
     private boolean isPortSet;
-    private ArrayList<Message> messages;
+    private final ArrayList<Message> messages;
 
     static {
         allUsers = new ArrayList<>();
@@ -58,6 +58,7 @@ public class User {
         this.port = port;
         if (UserConfig.getLoggedInUser() == this)
             MailController.setShouldCheckNewMessages(true);
+        this.addContact(this.username, "127.0.0.1", this.port);
     }
 
     public boolean isPortSet() {
@@ -94,4 +95,38 @@ public class User {
         messages.add(message);
     }
 
+    public Contact getContactByUsername(String username) {
+        for (Contact contact : contacts) {
+            if (contact.getUsername().equals(username)) return contact;
+        }
+        return null;
+    }
+
+    public void addContact(String username, String host, int port) {
+        Contact previousContact = getContactByUsername(username);
+        if (previousContact != null) {
+            previousContact.setPort(port);
+            previousContact.setHost(host);
+        } else {
+            Contact contact = new Contact(username, host, port);
+            contacts.add(contact);
+        }
+    }
+
+    public ArrayList<String> getContactsInfo() {
+        ArrayList<String> contactsInfo = new ArrayList<>();
+        for (Contact contact : contacts) {
+            contactsInfo.add(contact.toStringWithUsername());
+        }
+        return contactsInfo;
+    }
+
+    public ArrayList<String> getMessagesFrom(String senderUsername) {
+        ArrayList<String> messagesFromUsername = new ArrayList<>();
+        for (Message message : messages) {
+            if (message.getSenderUsername().equals(senderUsername))
+                messagesFromUsername.add(message.getText());
+        }
+        return messagesFromUsername;
+    }
 }

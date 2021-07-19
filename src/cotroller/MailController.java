@@ -1,5 +1,6 @@
 package cotroller;
 
+import model.Contact;
 import model.User;
 import view.MainMenu;
 
@@ -62,5 +63,11 @@ public class MailController {
 
     public static void stopReceivingMessages() {
         shouldCheckNewMessages = false;
+    }
+
+    public static String sendToContact(User user, String message, String contactUsername) {
+        Contact contact = user.getContactByUsername(contactUsername);
+        if (contact == null) return "no contact with such username was found";
+        return sendMessage(contact.getPort(), contact.getHost(), message);
     }
 }

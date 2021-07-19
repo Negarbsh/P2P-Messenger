@@ -46,7 +46,7 @@ public class MainMenu {
         try {
             return Integer.parseInt(intString);
         } catch (Exception e) {
-            return -1; //it's not good but who cares?
+            return -1;
         }
     }
 

@@ -13,8 +13,14 @@ public class Message {
         return senderUsername;
     }
 
+
+    public String getText() {
+        return this.text;
+    }
+
     @Override
     public String toString() {
         return senderUsername + " -> " + text;
     }
+
 }
