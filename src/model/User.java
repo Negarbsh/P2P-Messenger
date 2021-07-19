@@ -58,7 +58,6 @@ public class User {
         this.port = port;
         if (UserConfig.getLoggedInUser() == this)
             MailController.setShouldCheckNewMessages(true);
-        this.addContact(this.username, "127.0.0.1", this.port);
     }
 
     public boolean isPortSet() {
@@ -86,13 +85,18 @@ public class User {
         return new ArrayList<>(messages);
     }
 
-    public synchronized void addToMessages(String newMessage) {
+    public synchronized void addToMessages(String newMessage, String senderHostName) {
         String[] messageInfo = newMessage.split(" -> ");
-        if (messageInfo.length != 2) return;
+        if (messageInfo.length != 3) return;
         String sender = messageInfo[0];
         String text = messageInfo[1];
-        Message message = new Message(text, sender);
-        messages.add(message);
+        try {
+            int senderPort = Integer.parseInt(messageInfo[2]);
+            Message message = new Message(text, sender);
+            messages.add(message);
+            addContact(sender, senderHostName, senderPort);
+        } catch (Exception ignored) {
+        }
     }
 
     public Contact getContactByUsername(String username) {

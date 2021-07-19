@@ -85,17 +85,17 @@ public class MailMenu {
         if (host == null) {
             host = currentHostFocus;
             if (port != -1)
-                return MailController.sendMessage(port, host, message);
+                return MailController.sendMessage(port, host, user.getPort(), message);
             else if (currentPortFocus != -1) {
                 port = currentPortFocus;
-                return MailController.sendMessage(port, host, message);
+                return MailController.sendMessage(port, host, user.getPort(), message);
             } else return messageSendingError;
         } else {
             if (port == -1)
                 port = currentPortFocus;
             if (port == -1)
                 return messageSendingError;
-            return MailController.sendMessage(port, host, message);
+            return MailController.sendMessage(port, host, user.getPort(), message);
         }
     }
 }

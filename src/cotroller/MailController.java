@@ -21,14 +21,14 @@ public class MailController {
         if (shouldCheckNewMessages) startReceivingMessages();
     }
 
-    public static String sendMessage(int portToSend, String hostToSend, String message) {
+    public static String sendMessage(int portToSend, String hostToSend, int myPort, String message) {
         User currentUser = UserConfig.getLoggedInUser();
         if (currentUser == null) return MainMenu.noLogin;
         if (hostToSend == null || portToSend == -1) return messageSendingError;
         try {
             Socket socket = new Socket(hostToSend, portToSend);
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            dataOutputStream.writeUTF(currentUser.getUsername() + " -> " + message);
+            dataOutputStream.writeUTF(currentUser.getUsername() + " -> " + message + " -> " + myPort);
             dataOutputStream.flush();
             dataOutputStream.close();
             socket.close();
@@ -50,7 +50,7 @@ public class MailController {
                     Socket socket = serverSocket.accept();
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     String message = dataInputStream.readUTF();
-                    user.addToMessages(message);
+                    user.addToMessages(message, socket.getInetAddress().getCanonicalHostName());
                 }
                 if (dataInputStream != null)
                     dataInputStream.close();
@@ -68,6 +68,6 @@ public class MailController {
     public static String sendToContact(User user, String message, String contactUsername) {
         Contact contact = user.getContactByUsername(contactUsername);
         if (contact == null) return "no contact with such username was found";
-        return sendMessage(contact.getPort(), contact.getHost(), message);
+        return sendMessage(contact.getPort(), contact.getHost(), user.getPort(), message);
     }
 }
